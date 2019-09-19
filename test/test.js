@@ -1,6 +1,6 @@
 
 import {
-  convertRoute, validateFile, fileMd, readDirectory,
+  convertRoute, validateFile, fileMd, readDirectory, readFilesSync,
 } from '../src/path.js';
 
 describe('convertRoute', () => {
@@ -33,7 +33,6 @@ describe('fileMd', () => {
   });
 });
 
-
 describe('readDirectory', () => {
   it('Debería ser una función', () => {
     expect(typeof readDirectory).toBe('function');
@@ -45,8 +44,11 @@ describe('readDirectory', () => {
   });
 });
 
-// describe('readFilesSync', () => {
-//   it('Debería ser una función', () => {
-//     expect(typeof readFilesSync).toBe('function');
-//   });
-// });
+describe('readFilesSync', () => {
+  it('Debería ser una función', () => {
+    expect(typeof readFilesSync).toBe('function');
+  });
+  it('Debería leer el contenido del archivo .md', () => {
+    expect(readFilesSync('C:/Users/ERIK/Desktop/LABORATORIA/LIM010-fe-md-links/test/pruebas/prueba.md')).toBe('hola es la prueba');
+  });
+});

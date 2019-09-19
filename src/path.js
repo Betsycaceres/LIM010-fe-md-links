@@ -1,6 +1,9 @@
 /* eslint-disable eol-last */
 const path = require('path');
 const fs = require('fs');
+// const marked = require('marked');
+
+// console.log(marked('#hello world of mark down!'));
 
 export const convertRoute = (route) => {
   const absolutePath = path.isAbsolute(route);
@@ -47,7 +50,7 @@ export const readDirectory = (route) => {
 // console.log(readDirectory('./test/pruebas'));
 
 // Lee el contenido de  archivo .md
-// export const readFilesSync = (route) => fs.readFileSync(route, 'utf8');
+export const readFilesSync = (route) => fs.readFileSync(route, 'utf8');
 
 // eslint-disable-next-line max-len
 // console.log(readFilesSync('C:/Users/ERIK/Desktop/LABORATORIA/LIM010-fe-md-links/test/pruebas/prueba.md'));
