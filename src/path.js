@@ -1,7 +1,8 @@
 /* eslint-disable eol-last */
 const path = require('path');
 const fs = require('fs');
-// const marked = require('marked');
+const marked = require('marked');
+// const fetch = require('node-fetch');
 
 // console.log(marked('#hello world of mark down!'));
 
@@ -13,13 +14,13 @@ export const convertRoute = (route) => {
   return route;
 };
 // eslint-disable-next-line max-len
-// console.log(convertRoute('C:/Users/ERIK/Desktop/LABORATORIA/LIM010-fe-md-links/test/pruebas/prueba.md'));
+// console.log(convertRoute(path.join(process.cwd(), 'test/pruebas/prueba.md')));
 
 // Existe archivo
 export const validateFile = (route) => fs.statSync((route)).isFile();
 
 // eslint-disable-next-line max-len
-// console.log(validateFile('C:/Users/ERIK/Desktop/LABORATORIA/LIM010-fe-md-links/test/pruebas/prueba.md'));
+// console.log(validateFile(path.join(process.cwd(), 'test/pruebas/prueba.md')));
 
 // Es un archivo .md
 export const fileMd = (route) => {
@@ -27,7 +28,7 @@ export const fileMd = (route) => {
   return extName;
 };
 // eslint-disable-next-line max-len
-// console.log(fileMd('C:/Users/ERIK/Desktop/LABORATORIA/LIM010-fe-md-links/test/pruebas/prueba.md'));
+// console.log(fileMd(path.join(process.cwd(), 'test/pruebas/prueba.md')));
 
 
 // Leer los archivos de una carpeta
@@ -47,10 +48,30 @@ export const readDirectory = (route) => {
   }
   return directory;
 };
-// console.log(readDirectory('./test/pruebas'));
+// console.log(readDirectory(path.join(process.cwd(), 'test/pruebas/prueba.md')));
 
 // Lee el contenido de  archivo .md
 export const readFilesSync = (route) => fs.readFileSync(route, 'utf8');
 
 // eslint-disable-next-line max-len
-// console.log(readFilesSync('C:/Users/ERIK/Desktop/LABORATORIA/LIM010-fe-md-links/test/pruebas/prueba.md'));
+// console.log(readFilesSync(path.join(process.cwd(), 'test/pruebas/prueba.md')));
+
+
+export const markdownLinks = (route) => {
+  const links = [];
+  const arrayArchivos = readDirectory(route);
+  arrayArchivos.forEach((element) => {
+    const readFile = readFilesSync(element);
+    const render = new marked.Renderer();
+    render.link = (href, title, text) => {
+      links.push({
+        href,
+        path: element,
+        text,
+      });
+    };
+    marked(readFile, { renderer: render });
+  });
+  return links;
+};
+// console.log(markdownLinks(path.join(process.cwd(), 'test/pruebas/prueba.md')));

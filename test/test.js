@@ -1,6 +1,6 @@
-
+import path from 'path';
 import {
-  convertRoute, validateFile, fileMd, readDirectory, readFilesSync,
+  convertRoute, validateFile, fileMd, readDirectory, readFilesSync, markdownLinks,
 } from '../src/path.js';
 
 describe('convertRoute', () => {
@@ -8,10 +8,10 @@ describe('convertRoute', () => {
     expect(typeof convertRoute).toBe('function');
   });
   it('Debería retornar una ruta absoluta cuando el argumento es una ruta relativa', () => {
-    expect(convertRoute('./test/pruebas/prueba.md')).toEqual('C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md');
+    expect(convertRoute('./test/pruebas/prueba.md')).toEqual(path.join(process.cwd(), 'test/pruebas/prueba.md'));
   });
   it('Debería retornar  una ruta absoluta', () => {
-    expect(convertRoute('C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md')).toBe('C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md');
+    expect(convertRoute(path.join(process.cwd(), 'test/pruebas/prueba.md'))).toBe(path.join(process.cwd(), 'test/pruebas/prueba.md'));
   });
 });
 
@@ -20,7 +20,7 @@ describe('validateFile', () => {
     expect(typeof validateFile).toBe('function');
   });
   it('Debería   retornar true si el archivo existe', () => {
-    expect(validateFile('C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md')).toBe(true);
+    expect(validateFile(path.join(process.cwd(), 'test/pruebas/prueba.md'))).toBe(true);
   });
 });
 
@@ -28,8 +28,8 @@ describe('fileMd', () => {
   it('Debería ser una función', () => {
     expect(typeof fileMd).toBe('function');
   });
-  it('Debería   retornar true si el archivo ', () => {
-    expect(fileMd('C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md')).toBe(true);
+  it('Debería   retornar true si es un archivo .md ', () => {
+    expect(fileMd(path.join(process.cwd(), 'test/pruebas/prueba.md'))).toBe(true);
   });
 });
 
@@ -37,8 +37,8 @@ describe('readDirectory', () => {
   it('Debería ser una función', () => {
     expect(typeof readDirectory).toBe('function');
   });
-  it('Debería retornar un array con archivos .md', () => {
-    expect(readDirectory('./test/pruebas')).toEqual(['C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\archivo.md',
+  it('Debería retornar un array  con la ruta de los archivos .md', () => {
+    expect(readDirectory(path.join(process.cwd(), 'test/pruebas'))).toEqual(['C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\archivo.md',
       'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
       'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba2\\prueba2.md']);
   });
@@ -49,6 +49,26 @@ describe('readFilesSync', () => {
     expect(typeof readFilesSync).toBe('function');
   });
   it('Debería leer el contenido del archivo .md', () => {
-    expect(readFilesSync('C:/Users/ERIK/Desktop/LABORATORIA/LIM010-fe-md-links/test/pruebas/prueba.md')).toBe('hola es la prueba');
+    expect(readFilesSync(path.join(process.cwd(), 'test/pruebas/prueba.md'))).toBe('[laboratoria](https://www.laboratoria.la)[google](https://www.google.com)');
+  });
+});
+
+describe('markdownLinks', () => {
+  it('Debería ser una función', () => {
+    expect(typeof markdownLinks).toBe('function');
+  });
+  it('Debería retornar un array de objetos con tres propiedades: href, path y text', () => {
+    expect(markdownLinks('./test/pruebas')).toEqual([
+      {
+        href: 'https://www.laboratoria.la',
+        path: 'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
+        text: 'laboratoria',
+      },
+      {
+        href: 'https://www.google.com',
+        path:
+          'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
+        text: 'google',
+      }]);
   });
 });
