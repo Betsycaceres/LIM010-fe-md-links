@@ -38,9 +38,7 @@ describe('readDirectory', () => {
     expect(typeof readDirectory).toBe('function');
   });
   it('Debería retornar un array  con la ruta de los archivos .md', () => {
-    expect(readDirectory(path.join(process.cwd(), 'test/pruebas'))).toEqual(['C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\archivo.md',
-      'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
-      'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba2\\prueba2.md']);
+    expect(readDirectory(path.join(process.cwd(), 'test/pruebas'))).toEqual([path.join(process.cwd(), 'test/pruebas/archivo.md'), path.join(process.cwd(), 'test/pruebas/prueba.md'), path.join(process.cwd(), 'test/pruebas/prueba2/prueba2.md')]);
   });
 });
 
@@ -61,13 +59,12 @@ describe('markdownLinks', () => {
     expect(markdownLinks('./test/pruebas')).toEqual([
       {
         href: 'https://www.laboratoria.la',
-        path: 'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
+        path: path.join(process.cwd(), 'test/pruebas/prueba.md'),
         text: 'laboratoria',
       },
       {
         href: 'https://www.google.com',
-        path:
-          'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
+        path: path.join(process.cwd(), 'test/pruebas/prueba.md'),
         text: 'google',
       }]);
   });

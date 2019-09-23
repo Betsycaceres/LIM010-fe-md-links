@@ -1,10 +1,7 @@
-/* eslint-disable eol-last */
 const path = require('path');
 const fs = require('fs');
 const marked = require('marked');
-// const fetch = require('node-fetch');
-
-// console.log(marked('#hello world of mark down!'));
+const fetch = require('node-fetch');
 
 export const convertRoute = (route) => {
   const absolutePath = path.isAbsolute(route);
@@ -56,7 +53,7 @@ export const readFilesSync = (route) => fs.readFileSync(route, 'utf8');
 // eslint-disable-next-line max-len
 // console.log(readFilesSync(path.join(process.cwd(), 'test/pruebas/prueba.md')));
 
-
+// Leer y recorrer los links de archivos .md
 export const markdownLinks = (route) => {
   const links = [];
   const arrayArchivos = readDirectory(route);
@@ -75,3 +72,21 @@ export const markdownLinks = (route) => {
   return links;
 };
 // console.log(markdownLinks(path.join(process.cwd(), 'test/pruebas/prueba.md')));
+
+// Obteniendo el estado de los links (válido o no)
+export const validateLinks = (route) => {
+  const arrayObj = markdownLinks(route);
+  const urlMd = arrayObj.map((element) => new Promise((resolve) => fetch(element.href)
+    .then((res) => {
+      if (res.status > 199 && res.status < 400) {
+        element.status = res.status;
+        element.statusText = res.statusText;
+        resolve(element);
+      } else {
+        element.status = res.status;
+        element.statusText = res.statusText;
+        resolve(element);
+      }
+    })));
+  return Promise.all(urlMd);
+};
