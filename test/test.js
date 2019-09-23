@@ -1,6 +1,6 @@
 import path from 'path';
 import {
-  convertRoute, validateFile, fileMd, readDirectory, readFilesSync, markdownLinks,
+  convertRoute, validateFile, fileMd, readDirectory, readFilesSync, markdownLinks, validateLinks,
 } from '../src/path.js';
 
 describe('convertRoute', () => {
@@ -67,5 +67,12 @@ describe('markdownLinks', () => {
         path: path.join(process.cwd(), 'test/pruebas/prueba.md'),
         text: 'google',
       }]);
+  });
+});
+
+
+describe('validateLinkss', () => {
+  it('Debería ser una función', () => {
+    expect(typeof validateLinks).toBe('function');
   });
 });

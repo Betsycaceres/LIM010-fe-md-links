@@ -78,15 +78,18 @@ export const validateLinks = (route) => {
   const arrayObj = markdownLinks(route);
   const urlMd = arrayObj.map((element) => new Promise((resolve) => fetch(element.href)
     .then((res) => {
+      const result = { ...element }; // Object.assign({}, element)
       if (res.status > 199 && res.status < 400) {
-        element.status = res.status;
-        element.statusText = res.statusText;
-        resolve(element);
+        result.status = res.status;
+        result.statusText = res.statusText;
+        resolve(result);
       } else {
-        element.status = res.status;
-        element.statusText = res.statusText;
-        resolve(element);
+        result.status = res.status;
+        result.statusText = res.statusText;
+        resolve(result);
       }
     })));
   return Promise.all(urlMd);
 };
+
+
