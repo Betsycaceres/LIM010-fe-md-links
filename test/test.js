@@ -75,4 +75,24 @@ describe('validateLinkss', () => {
   it('Debería ser una función', () => {
     expect(typeof validateLinks).toBe('function');
   });
+  it('Debería retornar un array con cinco propiedades:href, path., text, status y statusText', (done) => {
+    validateLinks(path.join(process.cwd(), 'test/pruebas/prueba.md'))
+      .then((res) => {
+        expect(res).toEqual([{
+          href: 'https://www.laboratoria.la',
+          path: path.join(process.cwd(), 'test/pruebas/prueba.md'),
+          text: 'laboratoria',
+          status: 200,
+          statusText: 'OK',
+        },
+        {
+          href: 'https://www.google.com',
+          path: path.join(process.cwd(), 'test/pruebas/prueba.md'),
+          text: 'google',
+          status: 200,
+          statusText: 'OK',
+        }]);
+        done();
+      });
+  });
 });

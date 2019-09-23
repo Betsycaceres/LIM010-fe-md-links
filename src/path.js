@@ -93,3 +93,7 @@ export const validateLinks = (route) => {
 };
 
 
+// validateLinks(path.join(process.cwd(), 'test/pruebas/prueba.md'))
+//   .then((res) => {
+//     console.log(res);
+//   });
