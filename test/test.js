@@ -3,6 +3,7 @@ import {
   convertRoute, validateFile, fileMd, readDirectory, readFilesSync, markdownLinks,
 } from '../src/path.js';
 import { validateLinks } from '../src/file.js';
+import { mdLinks, statsOfLinks } from '../src/mdlinks.js';
 
 const output = [{
   href: 'https://www.laboratoria.la',
@@ -116,5 +117,17 @@ describe('validateLinks', () => {
         expect(res).toEqual(output2);
         done();
       });
+  });
+});
+
+describe('mdLinks', () => {
+  it('Debería ser una función', () => {
+    expect(typeof mdLinks).toBe('function');
+  });
+});
+
+describe('statsOfLinks', () => {
+  it('Debería ser una función', () => {
+    expect(typeof statsOfLinks).toBe('function');
   });
 });
