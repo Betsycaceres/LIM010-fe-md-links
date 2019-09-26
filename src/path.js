@@ -9,23 +9,15 @@ export const convertRoute = (route) => {
   }
   return route;
 };
-// eslint-disable-next-line max-len
-// console.log(convertRoute(path.join(process.cwd(), 'test/pruebas/prueba.md')));
 
 // Existe archivo
 export const validateFile = (route) => fs.statSync((route)).isFile();
-
-// eslint-disable-next-line max-len
-// console.log(validateFile(path.join(process.cwd(), 'test/pruebas/prueba.md')));
 
 // Es un archivo .md
 export const fileMd = (route) => {
   const extName = path.extname(route).toLowerCase() === '.md';
   return extName;
 };
-// eslint-disable-next-line max-len
-// console.log(fileMd(path.join(process.cwd(), 'test/pruebas/prueba.md')));
-
 
 // Leer los archivos de una carpeta
 export const readDirectory = (route) => {
@@ -44,25 +36,22 @@ export const readDirectory = (route) => {
   }
   return directory;
 };
-// console.log(readDirectory(path.join(process.cwd(), 'test/pruebas/prueba.md')));
+
 
 // Lee el contenido de  archivo .md
 export const readFilesSync = (route) => fs.readFileSync(route, 'utf8');
-
-// eslint-disable-next-line max-len
-// console.log(readFilesSync(path.join(process.cwd(), 'test/pruebas/prueba.md')));
 
 // Leer y recorrer los links de archivos .md
 export const markdownLinks = (route) => {
   const links = [];
   const arrayArchivos = readDirectory(route);
-  arrayArchivos.forEach((element) => {
-    const readFile = readFilesSync(element);
+  arrayArchivos.forEach((elemento) => {
+    const readFile = readFilesSync(elemento);
     const render = new marked.Renderer();
     render.link = (href, title, text) => {
       links.push({
         href,
-        path: element,
+        file: elemento,
         text,
       });
     };
@@ -70,4 +59,3 @@ export const markdownLinks = (route) => {
   });
   return links;
 };
-// console.log(markdownLinks(path.join(process.cwd(), 'test/pruebas/prueba.md')));

@@ -3,30 +3,13 @@ import {
   convertRoute, validateFile, fileMd, readDirectory, readFilesSync, markdownLinks,
 } from '../src/path.js';
 import { validateLinks } from '../src/file.js';
-import { mdLinks, statsOfLinks } from '../src/mdlinks.js';
+import {
+  mdLinks, statsOfLinks, funcionValidate, statsAndValidate,
+} from '../src/mdlinks.js';
 
 const output = [{
   href: 'https://www.laboratoria.la',
-  path:
-    'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
-  text: 'laboratoria',
-},
-{
-  href: 'https://www.google.com/gr',
-  path:
-    'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
-  text: 'google',
-},
-{
-  href: 'htt://www.youtube.com/?hl=es-419&gl=PE',
-  path:
-    'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
-  text: 'youtube',
-}];
-const output1 = '[laboratoria](https://www.laboratoria.la)[google](https://www.google.com/gr)[youtube](htt://www.youtube.com/?hl=es-419&gl=PE)';
-const output2 = [{
-  href: 'https://www.laboratoria.la',
-  path:
+  file:
     'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
   text: 'laboratoria',
   status: 200,
@@ -34,20 +17,28 @@ const output2 = [{
 },
 {
   href: 'https://www.google.com/gr',
-  path:
+  file:
     'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
   text: 'google',
   status: 404,
   statusText: 'Fail',
+}];
+const output1 = '[laboratoria](https://www.laboratoria.la)[google](https://www.google.com/gr)';
+const output2 = [{
+  href: 'https://www.laboratoria.la',
+  file:
+    'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
+  text: 'laboratoria',
 },
 {
-  href: 'htt://www.youtube.com/?hl=es-419&gl=PE',
-  path:
+  href: 'https://www.google.com/gr',
+  file:
     'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
-  text: 'youtube',
-  status: 'Only HTTP(S) protocols are supported',
-  statusText: 'Ésta ruta no existe',
+  text: 'google',
 }];
+
+const output3 = ['C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.laboratoria.la OK200 laboratoria',
+  'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.google.com/gr Fail404 google'];
 
 describe('convertRoute', () => {
   it('Debería ser una función', () => {
@@ -102,7 +93,7 @@ describe('markdownLinks', () => {
     expect(typeof markdownLinks).toBe('function');
   });
   it('Debería retornar un array de objetos con tres propiedades: href, path y text', () => {
-    expect(markdownLinks('./test/pruebas')).toEqual(output);
+    expect(markdownLinks('./test/pruebas')).toEqual(output2);
   });
 });
 
@@ -114,7 +105,7 @@ describe('validateLinks', () => {
   it('Debería retornar un array con cinco propiedades:href, path., text, status y statusText', (done) => {
     validateLinks(path.join(process.cwd(), 'test/pruebas/prueba.md'))
       .then((res) => {
-        expect(res).toEqual(output2);
+        expect(res).toEqual(output);
         done();
       });
   });
@@ -124,10 +115,40 @@ describe('mdLinks', () => {
   it('Debería ser una función', () => {
     expect(typeof mdLinks).toBe('function');
   });
+  it('Deberia devolver array con los links validados ', (done) => {
+    mdLinks((path.join(process.cwd(), 'test/pruebas/prueba.md')), { validate: true })
+      .then((res) => {
+        expect(res).toEqual(output);
+        done();
+      });
+  });
+  it('Deberia devolver un array con los links', () => {
+    mdLinks((path.join(process.cwd(), 'test/pruebas/prueba.md')), { validate: false })
+      .then((res) => {
+        expect(res).toEqual(output2);
+      });
+  });
 });
 
-describe('statsOfLinks', () => {
+describe('funcionValidate', () => {
   it('Debería ser una función', () => {
-    expect(typeof statsOfLinks).toBe('function');
+    expect(typeof funcionValidate).toBe('function');
+  });
+  it('Debería retornar un string de todos los elementos del array', () => {
+    expect(funcionValidate(output)).toEqual(output3);
+  });
+});
+
+
+describe('statsOfLinks Debería devolver un string de Total  y Unique', () => {
+  it('Debería retornar un string', () => {
+    expect(statsOfLinks(output)).toBe('Total:2 Unique: 2');
+  });
+});
+
+
+describe('statsAndValidate Debería devolver un string de Total  , Unique, Broken', () => {
+  it('Debería retornar un string', () => {
+    expect(statsAndValidate(output)).toBe('Total:2 Unique: 2 Broken: 1');
   });
 });

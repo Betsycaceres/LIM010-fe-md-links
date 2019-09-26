@@ -1,39 +1,37 @@
-import { convertRoute, markdownLinks } from './path.js';
+import { markdownLinks } from './path.js';
 import { validateLinks } from './file.js';
 
-const path = require('path');
-
+// const path = require('path');
 export const mdLinks = (mypath, options) => new Promise((resolve) => {
-	const routeFile = convertRoute(mypath);
-	if (options.validate === true) {
-		resolve(validateLinks(routeFile));
-	} else {
-		resolve(markdownLinks(routeFile));
-	}
-});
-
-// // eslint-disable-next-line max-len
-mdLinks(path.join(process.cwd(), 'test/pruebas/prueba.md'), { validate: false }).then((response) => {
-  console.log(response);
+  if (options && options.validate) {
+    resolve(validateLinks(mypath));
+  } else {
+    resolve(markdownLinks(mypath));
+  }
 });
 
 // Option(--stats)
 export const statsOfLinks = (arrayLinks) => {
-	const elementosArray = arrayLinks.map((element) => element.href);
-	const noRepetidos = elementosArray.filter((valor, indiceActual, arreglo) => arreglo.indexOf(valor) === indiceActual);
-	const stats = `Total:${elementosArray.length} Unique: ${noRepetidos.length}`;
-	return stats;
+  const elementosArray = arrayLinks.map((element) => element.href);
+  // eslint-disable-next-line max-len
+  const noRepetidos = elementosArray.filter((valor, indiceActual, arreglo) => arreglo.indexOf(valor) === indiceActual);
+  const stats = `Total:${elementosArray.length} Unique: ${noRepetidos.length}`;
+  return stats;
 };
-
-// console.log(statsOfLinks(markdownLinks(path.join(process.cwd(), 'test/pruebas/prueba.md'))));
 
 // Option(--validate)
-
-export const validateLink = (arrayLinks) => {
-	const elementosArray = arrayLinks.map((element) => element.href);
-	const noRepetidos = elementosArray.filter((valor, indiceActual, arreglo) => arreglo.indexOf(valor) === indiceActual);
-	const broken = elementosArray.filter((statusText, indiceActual, arreglo) => arreglo.statusText === 'Fail');
-	const stats = `Total:${elementosArray.length} Unique: ${noRepetidos.length} Broken: ${broken.length}`;
-	return stats;
+export const funcionValidate = (arrayLinks) => {
+  const elementosArray = arrayLinks.map((element) => `${element.file} ${element.href} ${element.statusText}${element.status} ${element.text}`);
+  return elementosArray;
 };
-console.log(validateLink(markdownLinks(path.join(process.cwd(), 'test/pruebas/prueba.md'))));
+
+// Option  (--stats) & (--validate)
+
+export const statsAndValidate = (arrayLinks) => {
+  const elementosLinks = arrayLinks.map((element) => element.href);
+  // eslint-disable-next-line max-len
+  const linksUnique = elementosLinks.filter((valor, indiceActual, arreglo) => arreglo.indexOf(valor) === indiceActual);
+  const elementosBroken = arrayLinks.filter((valor) => valor.statusText === 'Fail');
+  const statsValidate = `Total:${elementosLinks.length} Unique: ${linksUnique.length} Broken: ${elementosBroken.length}`;
+  return statsValidate;
+};

@@ -1,7 +1,6 @@
 import { markdownLinks } from './path.js';
 
 const fetch = require('node-fetch');
-
 // Obteniendo el estado de los links (válido o no)
 export const validateLinks = (route) => {
   const arrayObj = markdownLinks(route);
@@ -17,12 +16,7 @@ export const validateLinks = (route) => {
         result.statusText = 'Fail';
         resolve(result);
       }
-    })
-    .catch((error) => {
-      const result = { ...element };
-      result.status = error.message;
-      result.statusText = 'Ésta ruta no existe';
-      resolve(result);
     })));
   return Promise.all(urlMd);
 };
+
