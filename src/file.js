@@ -19,4 +19,3 @@ export const validateLinks = (route) => {
     })));
   return Promise.all(urlMd);
 };
-

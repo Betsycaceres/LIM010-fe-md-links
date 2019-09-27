@@ -22,7 +22,7 @@ export const statsOfLinks = (arrayLinks) => {
 // Option(--validate)
 export const funcionValidate = (arrayLinks) => {
   const elementosArray = arrayLinks.map((element) => `${element.file} ${element.href} ${element.statusText}${element.status} ${element.text}`);
-  return elementosArray;
+  return elementosArray.join('\n');
 };
 
 // Option  (--stats) & (--validate)

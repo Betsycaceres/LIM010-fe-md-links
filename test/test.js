@@ -37,8 +37,8 @@ const output2 = [{
   text: 'google',
 }];
 
-const output3 = ['C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.laboratoria.la OK200 laboratoria',
-  'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.google.com/gr Fail404 google'];
+const output3 = `C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.laboratoria.la OK200 laboratoria
+C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.google.com/gr Fail404 google`;
 
 describe('convertRoute', () => {
   it('Debería ser una función', () => {
