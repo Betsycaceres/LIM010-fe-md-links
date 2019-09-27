@@ -2,6 +2,12 @@ const path = require('path');
 const fs = require('fs');
 const marked = require('marked');
 
+
+// Si existe la ruta.
+export const isroute = (route) => fs.existsSync(route);
+// console.log(isroute(path.join(process.cwd(), 'test/pruebas/prueba.md')));
+
+
 export const convertRoute = (route) => {
   const absolutePath = path.isAbsolute(route);
   if (!absolutePath) {

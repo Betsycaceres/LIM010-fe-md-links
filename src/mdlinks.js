@@ -1,14 +1,24 @@
-import { markdownLinks } from './path.js';
+import { markdownLinks, isroute } from './path.js';
 import { validateLinks } from './file.js';
 
 // const path = require('path');
-export const mdLinks = (mypath, options) => new Promise((resolve) => {
-  if (options && options.validate) {
-    resolve(validateLinks(mypath));
+// const path = require('path');
+export const mdLinks = (mypath, options) => new Promise((resolve, reject) => {
+  if (isroute(mypath)) {
+    if (options && options.validate) {
+      resolve(validateLinks(mypath));
+    } else {
+      resolve(markdownLinks(mypath));
+    }
   } else {
-    resolve(markdownLinks(mypath));
+    reject(new Error('fail'));
   }
 });
+// console.log(path.join(process.cwd(), 'test/pruebas/prueba.md'));
+
+// mdLinks(path.join(process.cwd(), 'test/pruebas/prueba.md'), { validate: true })
+//   .then((data) => console.log(data))
+//   .catch((error) => console.log(error));
 
 // Option(--stats)
 export const statsOfLinks = (arrayLinks) => {
@@ -26,12 +36,11 @@ export const funcionValidate = (arrayLinks) => {
 };
 
 // Option  (--stats) & (--validate)
-
 export const statsAndValidate = (arrayLinks) => {
   const elementosLinks = arrayLinks.map((element) => element.href);
   // eslint-disable-next-line max-len
   const linksUnique = elementosLinks.filter((valor, indiceActual, arreglo) => arreglo.indexOf(valor) === indiceActual);
   const elementosBroken = arrayLinks.filter((valor) => valor.statusText === 'Fail');
-  const statsValidate = `Total:${elementosLinks.length} Unique: ${linksUnique.length} Broken: ${elementosBroken.length}`;
+  const statsValidate = `Total:${elementosLinks.length} \nUnique: ${linksUnique.length} \nBroken: ${elementosBroken.length}`;
   return statsValidate;
 };

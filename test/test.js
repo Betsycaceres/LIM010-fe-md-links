@@ -7,6 +7,8 @@ import {
   mdLinks, statsOfLinks, funcionValidate, statsAndValidate,
 } from '../src/mdlinks.js';
 
+import { mdLinksCli } from '../src/cli.js';
+
 const output = [{
   href: 'https://www.laboratoria.la',
   file:
@@ -39,6 +41,9 @@ const output2 = [{
 
 const output3 = `C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.laboratoria.la OK200 laboratoria
 C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.google.com/gr Fail404 google`;
+
+const output4 = `C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.laboratoria.la OK
+C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.google.com/gr Fail`;
 
 describe('convertRoute', () => {
   it('Debería ser una función', () => {
@@ -149,6 +154,21 @@ describe('statsOfLinks Debería devolver un string de Total  y Unique', () => {
 
 describe('statsAndValidate Debería devolver un string de Total  , Unique, Broken', () => {
   it('Debería retornar un string', () => {
-    expect(statsAndValidate(output)).toBe('Total:2 Unique: 2 Broken: 1');
+    expect(statsAndValidate(output)).toEqual('Total:2 \nUnique: 2 \nBroken: 1');
   });
+});
+
+describe('mdLinksCli', () => {
+  it('Debería ser una función', () => {
+    expect(typeof mdLinksCli).toBe('function');
+  });
+
+  it('La promesa debería devolver una cadena de enlaces', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')), { validate: true })
+    .then((result) => {
+      expect(result).toEqual(output4);
+    }));
+  it('La promesa debería devolver estadísticas de enlaces', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')), { stats: true })
+    .then((result) => {
+      expect(result).toEqual('Total:2 Unique: 2');
+    }));
 });
