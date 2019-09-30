@@ -1,13 +1,13 @@
 import path from 'path';
 import {
-  convertRoute, validateFile, fileMd, readDirectory, readFilesSync, markdownLinks,
+  isroute, convertRoute, validateFile, fileMd, readDirectory, readFilesSync, markdownLinks,
 } from '../src/path.js';
 import { validateLinks } from '../src/file.js';
 import {
   mdLinks, statsOfLinks, funcionValidate, statsAndValidate,
 } from '../src/mdlinks.js';
 
-import { mdLinksCli } from '../src/cli.js';
+import { mdLinksCli } from '../src/mlinkscli.js';
 
 const output = [{
   href: 'https://www.laboratoria.la',
@@ -41,9 +41,20 @@ const output2 = [{
 
 const output3 = `C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.laboratoria.la OK200 laboratoria
 C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.google.com/gr Fail404 google`;
-
 const output4 = `C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.laboratoria.la OK
 C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.google.com/gr Fail`;
+
+describe(' isroute', () => {
+  it('Debería ser una función', () => {
+    expect(typeof isroute).toBe('function');
+  });
+  it('Debería devolver true si la  ruta existe', () => {
+    expect(isroute('./test/pruebas/prueba.md')).toBe(true);
+  });
+  it('Debería devolver false si la  ruta  no existe', () => {
+    expect(isroute('./test/pruebas/pruebita/prueba.md')).toBe(false);
+  });
+});
 
 describe('convertRoute', () => {
   it('Debería ser una función', () => {
@@ -133,6 +144,12 @@ describe('mdLinks', () => {
         expect(res).toEqual(output2);
       });
   });
+  it('Deberia devolver fail si la ruta no existe', () => {
+    mdLinks((path.join(process.cwd(), 'test/pruebas/pruebita/')))
+      .catch((error) => {
+        expect(error.message).toBe('fail');
+      });
+  });
 });
 
 describe('funcionValidate', () => {
@@ -146,6 +163,9 @@ describe('funcionValidate', () => {
 
 
 describe('statsOfLinks Debería devolver un string de Total  y Unique', () => {
+  it('Debería ser una función', () => {
+    expect(typeof statsOfLinks).toBe('function');
+  });
   it('Debería retornar un string', () => {
     expect(statsOfLinks(output)).toBe('Total:2 Unique: 2');
   });
@@ -153,6 +173,9 @@ describe('statsOfLinks Debería devolver un string de Total  y Unique', () => {
 
 
 describe('statsAndValidate Debería devolver un string de Total  , Unique, Broken', () => {
+  it('Debería ser una función', () => {
+    expect(typeof statsAndValidate).toBe('function');
+  });
   it('Debería retornar un string', () => {
     expect(statsAndValidate(output)).toEqual('Total:2 \nUnique: 2 \nBroken: 1');
   });
@@ -162,13 +185,24 @@ describe('mdLinksCli', () => {
   it('Debería ser una función', () => {
     expect(typeof mdLinksCli).toBe('function');
   });
-
-  it('La promesa debería devolver una cadena de enlaces', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')), { validate: true })
+  it('La promesa  debería devolver un string de Total  , Unique, Broken', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')), '--stats', '--validate')
+    .then((result) => {
+      expect(result).toEqual('Total:2 \nUnique: 2 \nBroken: 1');
+    }));
+  it('La promesa  debería retornar un string de todos los elementos del array', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')), '--stats')
+    .then((result) => {
+      expect(result).toEqual('Total:2 Unique: 2');
+    }));
+  it('La promesa debería devolver estadísticas de enlaces', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')), '--validate')
+    .then((result) => {
+      expect(result).toEqual(output3);
+    }));
+  it('La promesa debería devolver un string  del enlace ingresado', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')))
     .then((result) => {
       expect(result).toEqual(output4);
     }));
-  it('La promesa debería devolver estadísticas de enlaces', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')), { stats: true })
-    .then((result) => {
-      expect(result).toEqual('Total:2 Unique: 2');
+  it('Debería devolver  fail si la ruta no existe ', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/pruebita/')))
+    .catch((error) => {
+      expect(error.message).toBe('fail');
     }));
 });
