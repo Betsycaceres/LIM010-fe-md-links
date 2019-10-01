@@ -167,7 +167,7 @@ describe('statsOfLinks Debería devolver un string de Total  y Unique', () => {
     expect(typeof statsOfLinks).toBe('function');
   });
   it('Debería retornar un string', () => {
-    expect(statsOfLinks(output)).toBe('Total:2 Unique: 2');
+    expect(statsOfLinks(output)).toEqual('Total:2 \nUnique: 2');
   });
 });
 
@@ -191,7 +191,7 @@ describe('mdLinksCli', () => {
     }));
   it('La promesa  debería retornar un string de todos los elementos del array', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')), '--stats')
     .then((result) => {
-      expect(result).toEqual('Total:2 Unique: 2');
+      expect(result).toEqual('Total:2 \nUnique: 2');
     }));
   it('La promesa debería devolver estadísticas de enlaces', () => mdLinksCli((path.join(process.cwd(), 'test/pruebas/prueba.md')), '--validate')
     .then((result) => {
