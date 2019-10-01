@@ -1,13 +1,15 @@
+// path (Módulo que proporciona utilidades para trabajar con rutas de archivos y directorios.
+// fs (Módulo que proporciona una API para interactuar con el sistema de archivos)
 const path = require('path');
 const fs = require('fs');
-const marked = require('marked');
+const marked = require('marked'); // permite analizar Markdown en HTML
 
 
-// Si existe la ruta.
+// Validar si la ruta existe--retorna true o false
 export const isroute = (route) => fs.existsSync(route);
 // console.log(isroute(path.join(process.cwd(), 'test/pruebas/prueba.md')));
 
-
+// Validar si la ruta es absoluta o Relativa y convertir
 export const convertRoute = (route) => {
   const absolutePath = path.isAbsolute(route);
   if (!absolutePath) {
@@ -17,6 +19,8 @@ export const convertRoute = (route) => {
 };
 
 // Existe archivo
+// Validar si es archivo --retorna true o false
+// fs.stat objeto que proporciona información de un archivo
 export const validateFile = (route) => fs.statSync((route)).isFile();
 
 // Es un archivo .md
@@ -25,7 +29,9 @@ export const fileMd = (route) => {
   return extName;
 };
 
-// Leer los archivos de una carpeta
+// console.log(fileMd(path.join(process.cwd(), 'test/pruebas/prueba.md')));
+// Retornar un array de los archivos md
+// fs.readdirSync lee el contenido de un directorio - síncrono
 export const readDirectory = (route) => {
   let directory = [];
   const routeFile = convertRoute(route);
@@ -47,13 +53,16 @@ export const readDirectory = (route) => {
 // Lee el contenido de  archivo .md
 export const readFilesSync = (route) => fs.readFileSync(route, 'utf8');
 
-// Leer y recorrer los links de archivos .md
+// Lee los archivos y extrae links, el texto y ruta del archivo en un array
 export const markdownLinks = (route) => {
   const links = [];
   const arrayArchivos = readDirectory(route);
   arrayArchivos.forEach((elemento) => {
+    // forEach que recorrera el array de as rutas de archivos .md
     const readFile = readFilesSync(elemento);
+    // almacenar en una constante  la funcionde leer el archivo
     const render = new marked.Renderer();
+    // buscar los link del archivo y solicitar los argumentos
     render.link = (href, title, text) => {
       links.push({
         href,
