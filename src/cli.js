@@ -1,6 +1,7 @@
 import { mdLinksCli } from './mlinkscli';
 
 const args = process.argv.slice(2);
+// console.log(process.argv)
 // console.log(`Hello Worl ${args}`);
 
 mdLinksCli(args[0], args[1], args[2])

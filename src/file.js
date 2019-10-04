@@ -19,3 +19,8 @@ export const validateLinks = (route) => {
     })));
   return Promise.all(urlMd);
 };
+
+// validateLinks('./test/pruebas/prueba.md')
+//   .then(respuestas => {
+//     console.log(respuestas)
+//   })

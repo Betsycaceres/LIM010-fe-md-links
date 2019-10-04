@@ -3,24 +3,23 @@ import {
   isroute, convertRoute, validateFile, fileMd, readDirectory, readFilesSync, markdownLinks,
 } from '../src/path.js';
 import { validateLinks } from '../src/file.js';
+import { mdLinks } from '../src/mdlinks.js';
 import {
-  mdLinks, statsOfLinks, funcionValidate, statsAndValidate,
-} from '../src/mdlinks.js';
+  statsOfLinks, funcionValidate, statsAndValidate,
+} from '../src/stat-validate';
 
 import { mdLinksCli } from '../src/mlinkscli.js';
 
 const output = [{
   href: 'https://www.laboratoria.la',
-  file:
-    'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
+  file: path.join(process.cwd(), 'test/pruebas/prueba.md'),
   text: 'laboratoria',
   status: 200,
   statusText: 'OK',
 },
 {
   href: 'https://www.google.com/gr',
-  file:
-    'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
+  file: path.join(process.cwd(), 'test/pruebas/prueba.md'),
   text: 'google',
   status: 404,
   statusText: 'Fail',
@@ -29,20 +28,19 @@ const output1 = '[laboratoria](https://www.laboratoria.la)[google](https://www.g
 const output2 = [{
   href: 'https://www.laboratoria.la',
   file:
-    'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
+  path.join(process.cwd(), 'test/pruebas/prueba.md'),
   text: 'laboratoria',
 },
 {
   href: 'https://www.google.com/gr',
   file:
-    'C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md',
+  path.join(process.cwd(), 'test/pruebas/prueba.md'),
   text: 'google',
 }];
-
-const output3 = `C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.laboratoria.la OK200 laboratoria
-C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.google.com/gr Fail404 google`;
-const output4 = `C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.laboratoria.la OK
-C:\\Users\\ERIK\\Desktop\\LABORATORIA\\LIM010-fe-md-links\\test\\pruebas\\prueba.md https://www.google.com/gr Fail`;
+const output3 = `${path.join(process.cwd(), 'test/pruebas/prueba.md')} https://www.laboratoria.la OK200 laboratoria
+${path.join(process.cwd(), 'test/pruebas/prueba.md')} https://www.google.com/gr Fail404 google`;
+const output4 = `${path.join(process.cwd(), 'test/pruebas/prueba.md')} https://www.laboratoria.la OK
+${path.join(process.cwd(), 'test/pruebas/prueba.md')} https://www.google.com/gr Fail`;
 
 describe(' isroute', () => {
   it('Debería ser una función', () => {

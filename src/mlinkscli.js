@@ -1,6 +1,9 @@
+
+import { mdLinks } from './mdlinks.js';
 import {
-  mdLinks, statsAndValidate, statsOfLinks, funcionValidate,
-} from './mdlinks';
+  statsOfLinks, funcionValidate, statsAndValidate,
+} from './stat-validate.js';
+
 // Grab provided args.
 // const [, , ...args] = process.argv;
 
