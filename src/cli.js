@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { mdLinksCli } from './mlinkscli';
 
 const args = process.argv.slice(2);
